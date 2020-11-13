@@ -33,6 +33,7 @@ def call(Map config) {
                         }
                         steps {
                             echo 'Building Go App'
+                            echo 'go build -o ' + config.name + ' ' + config.main
                             sh 'go build -o ' + config.name + ' ' + config.main
                             stash includes: 'bin/**', name: 'bin'
                         }
