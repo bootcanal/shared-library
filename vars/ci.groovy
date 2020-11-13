@@ -1,4 +1,4 @@
-#!groovy.
+#!groovy
 
 def call(Map config) {
     pipeline {
@@ -15,19 +15,21 @@ def call(Map config) {
             stage('Init') {
                 agent {
                     docker {
-                        image 'golang:1.13'
                         label 'docker'
+                        image 'golang:1.13'
                         args '-u root:sudo -v "${PWD}":/go -w /go'
                     }
                 }
                 stages {
                     stage('Initializing Git') {
-                        echo 'Setting up GitHub Access'
+                        steps {
+                            echo 'Setting up GitHub Access'
+                        }
                     }
                     stage('Initializing Go') {
                         when {
                             expression {
-                                fileExists '/go/go.mod'
+                                fileExists 'go.mod'
                             }
                         }
                         steps {
