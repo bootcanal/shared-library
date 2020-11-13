@@ -15,8 +15,8 @@ def call(Map config) {
             stage('Init') {
                 agent {
                     docker {
-                        label 'docker'
                         image 'golang:1.13'
+                        label 'docker'
                         args '-u root:sudo -v "${PWD}":/go -w /go'
                     }
                 }
