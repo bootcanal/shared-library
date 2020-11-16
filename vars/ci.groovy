@@ -3,6 +3,7 @@
 import com.github.bootcanal.*
 
 def call(Map config) {
+    def commit_id = "$(git rev-parse HEAD)"
     pipeline {
         agent none
 
@@ -78,6 +79,7 @@ def call(Map config) {
                                     }
                                     failure {
                                         echo "unit test result: ${currentBuild.result}, ${currentBuild.currentResult}"
+                                        GitHub.checkPR($GITHUB_CREDS_PSW, 'bootcanal', 'canal', commit_id, 'failure')
                                     }
                                 }
                             }
