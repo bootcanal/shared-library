@@ -76,10 +76,10 @@ def call(Map config) {
                 }
                 post {
                     success {
-                        echo 'current success result: ' + $currentBuild.result
+                        echo "current success result: ${currentBuild.result}"
                     }
                     failure {
-                        echo 'current failure result: ' + $currentBuild.result
+                        echo "current failure result: ${currentBuild.result}"
                     }
                 }
             }
