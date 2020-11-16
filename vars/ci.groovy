@@ -3,7 +3,7 @@
 import com.github.bootcanal.*
 
 def call(Map config) {
-    def commit_id = commitId()
+    def commit_id = GitHub.commitId()
 
     pipeline {
         agent none
