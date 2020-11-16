@@ -58,8 +58,11 @@ def call(Map config) {
                                     sh 'go test ./...'
                                 }
                                 post {
+                                    always {
+                                        echo "print unit test result: ${currentBuild.result}, ${currentBuild.currentResult}"
+                                    }
                                     failure {
-                                        echo 'unit test result: ' + "${currentBuild.result}"
+                                        echo "unit test result: ${currentBuild.result}, ${currentBuild.currentResult}"
                                     }
                                 }
                             }
