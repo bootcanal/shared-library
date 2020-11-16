@@ -56,6 +56,12 @@ def call(Map config) {
                                 steps {
                                     echo 'Running Go Unit Tests'
                                     sh 'go test ./...'
+                                    echo 'unit test result: ' + $currentBuild.result
+                                    script {
+                                        if ($currentBuild.result != 'SUCCESS') {
+                                            echo 'Run unit test failed: ' + $currentBuild.result
+                                        }
+                                    }
                                 }
                             }
                             stage('Run API Tests') {
