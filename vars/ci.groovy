@@ -29,11 +29,11 @@ def call(Map config) {
                                 echo 'token:'
                                 sh 'echo "${token}"'
                                 print token
-                                print 'token.collect { it } = ' + token.collect(it)
+                                print 'token.collect { it } = ' + token.collect { it }
                                 echo 'username:'
                                 sh 'echo "${username}"'
                                 print username
-                                print 'username.collect { it } =' + username.collect(it)
+                                print 'username.collect { it } =' + username.collect {it }
                             }
                         }
                     }
