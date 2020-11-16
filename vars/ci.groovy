@@ -4,6 +4,8 @@ import com.github.bootcanal.*
 
 def call(Map config) {
 
+    def GITHUB_TOKEN
+
     pipeline {
         agent none
 
@@ -38,14 +40,15 @@ def call(Map config) {
                             }
 
                             withCredentials([usernamePassword(credentialsId: 'DEVCX-GAMBIT-GITHUB', passwordVariable: 'token', usernameVariable: 'username')]) {
-                                echo 'token:'
-                                sh 'echo "${token}"'
-                                print token
-                                print 'token.collect { it } = ' + token.collect { it }
-                                echo 'username:'
-                                sh 'echo "${username}"'
-                                print username
-                                print 'username.collect { it } =' + username.collect {it }
+                                GITHUB_TOKEN = "${token}"
+//                                echo 'token:'
+//                                sh 'echo "${token}"'
+//                                print token
+//                                print 'token.collect { it } = ' + token.collect { it }
+//                                echo 'username:'
+//                                sh 'echo "${username}"'
+//                                print username
+//                                print 'username.collect { it } =' + username.collect {it }
                             }
                         }
                     }
@@ -81,7 +84,7 @@ def call(Map config) {
                                         echo "unit test result: ${currentBuild.result}, ${currentBuild.currentResult}"
                                         echo "git commit: ${COMMIT_ID}"
                                         script {
-                                            GitHub.checkPR(${env.GITHUB_CREDS_PSW}, 'bootcanal', 'canal', ${env.COMMIT_ID}, 'failure')
+                                            GitHub.checkPR(GITHUB_TOKEN, 'bootcanal', 'canal', ${env.COMMIT_ID}, 'failure')
                                         }
                                     }
                                 }
