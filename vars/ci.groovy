@@ -80,8 +80,9 @@ def call(Map config) {
                                     failure {
                                         echo "unit test result: ${currentBuild.result}, ${currentBuild.currentResult}"
                                         echo "git commit: ${COMMIT_ID}"
+
                                         script {
-                                            GitHub.checkPR(${GITHUB_CREDS_PSW}, 'bootcanal', 'canal', ${env.COMMIT_ID}, 'failure')
+                                            GitHub.checkPR("${GITHUB_CREDS_PSW}", 'bootcanal', 'canal', ${env.COMMIT_ID}, 'failure')
                                         }
                                     }
                                 }
