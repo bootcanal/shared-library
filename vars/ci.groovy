@@ -1,5 +1,7 @@
 #!groovy
 
+import com.github.bootcanal.*
+
 def call(Map config) {
     pipeline {
         agent none
@@ -16,6 +18,7 @@ def call(Map config) {
                 agent {
                     docker {
                         image 'golang:1.13'
+                        label 'docker'
                         args '-u root:sudo -v "${PWD}":/go -w /go'
                     }
                 }
@@ -23,6 +26,12 @@ def call(Map config) {
                     stage('Initializing Git') {
                         steps {
                             echo 'Setting up GitHub Access'
+                            withCredentials([useranamePassword(credentialsId: 'DEVCX-GAMBIT-GITHUB', passwordVariable: 'token', usernameVariable: 'username')]) {
+                                echo 'token:'
+                                echo '${token}'
+                                echo 'username:'
+                                echo '${username}'
+                            }
                         }
                     }
                     stage('Initializing Go') {
@@ -38,10 +47,20 @@ def call(Map config) {
                             stash includes: 'bin/**', name: 'bin'
                         }
                     }
-                }
-                post {
-                    always {
-                        cleanWs deleteDirs: true
+                    stage('Test') {
+                        parallel {
+                            stage('Run Go Unit Tests') {
+                                steps {
+                                    echo 'Running Go Unit Tests'
+                                    sh 'go test ./...'
+                                }
+                            }
+                            stage('Run API Tests') {
+                                steps {
+                                    echo 'Running API Tests'
+                                }
+                            }
+                        }
                     }
                 }
             }
