@@ -27,9 +27,9 @@ def call(Map config) {
                             echo 'Setting up GitHub Access'
                             withCredentials([usernamePassword(credentialsId: 'DEVCX-GAMBIT-GITHUB', passwordVariable: 'token', usernameVariable: 'username')]) {
                                 echo 'token:'
-                                echo '${token}'
+                                sh 'echo "${token}"'
                                 echo 'username:'
-                                echo '${username}'
+                                sh 'echo "${username}"'
                             }
                         }
                     }
