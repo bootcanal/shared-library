@@ -3,7 +3,6 @@
 import com.github.bootcanal.*
 
 def call(Map config) {
-    def commit_id = $(git rev-parse HEAD)
     pipeline {
         agent none
 
@@ -13,6 +12,7 @@ def call(Map config) {
             GOARCH = "amd64"
             CGO_ENABLED = "0"
             GITHUB_CREDS = credentials('DEVCX-GAMBIT-GITHUB')
+            COMMIT_ID = sh(script: "git rev-parse HEAD", returnStdout: true)
         }
 
         stages {
@@ -79,7 +79,7 @@ def call(Map config) {
                                     }
                                     failure {
                                         echo "unit test result: ${currentBuild.result}, ${currentBuild.currentResult}"
-                                        GitHub.checkPR($GITHUB_CREDS_PSW, 'bootcanal', 'canal', commit_id, 'failure')
+                                        GitHub.checkPR($GITHUB_CREDS_PSW, 'bootcanal', 'canal', ${COMMIT_ID}, 'failure')
                                     }
                                 }
                             }
