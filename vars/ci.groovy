@@ -59,7 +59,7 @@ def call(Map config) {
                                 }
                                 post {
                                     failure {
-                                        echo 'unit test result: ' + ${currentBuild.result}
+                                        echo 'unit test result: ' + "${currentBuild.result}"
                                     }
                                 }
                             }
