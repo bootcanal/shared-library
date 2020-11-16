@@ -1,7 +1,7 @@
 package com.github.bootcanal
 
 class GitHub {
-    def commitId() {
+    def String commitId() {
         return sh(script: "git rev-parse HEAD", returnStdout: true)
     }
     def checkPR(String token, String organization, String repo, String commit_id, String state) {
