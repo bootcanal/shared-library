@@ -56,8 +56,10 @@ def call(Map config) {
                                 steps {
                                     echo 'Running Go Unit Tests'
                                     sh 'go test ./...'
-                                    catchError(message: 'an error occur') {
-                                        echo 'unit test result: ' + $currentBuild.result
+                                }
+                                post {
+                                    failure {
+                                        echo 'unit test result: ' + ${currentBuild.result}
                                     }
                                 }
                             }
