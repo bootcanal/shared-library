@@ -13,7 +13,6 @@ def call(Map config) {
             GOARCH = "amd64"
             CGO_ENABLED = "0"
             GITHUB_CREDS = credentials('DEVCX-GAMBIT-GITHUB')
-            COMMIT_ID = sh(script: "git rev-parse HEAD", returnStdout: true)
         }
 
         stages {
@@ -67,6 +66,11 @@ def call(Map config) {
                         }
                     }
                     stage('Test') {
+                        steps {
+                            script {
+                                env.COMMIT_ID = sh(script: "git rev-parse HEAD", returnStdout: true).trim()
+                            }
+                        }
                         parallel {
                             stage('Run Go Unit Tests') {
                                 steps {
@@ -81,9 +85,9 @@ def call(Map config) {
                                     failure {
                                         echo "unit test result: ${currentBuild.result}, ${currentBuild.currentResult}"
                                         echo "git commit: ${COMMIT_ID}"
-//                                        script {
-//                                            GitHub.checkPR($GITHUB_CREDS_PSW, 'bootcanal', 'canal', ${COMMIT_HASH}, 'failure')
-//                                        }
+                                        script {
+                                            GitHub.checkPR($GITHUB_CREDS_PSW, 'bootcanal', 'canal', ${env.COMMIT_ID}, 'failure')
+                                        }
                                     }
                                 }
                             }
