@@ -13,8 +13,7 @@ def call(Map config) {
             GOARCH = "amd64"
             CGO_ENABLED = "0"
             GITHUB_CREDS = credentials('DEVCX-GAMBIT-GITHUB')
-            //COMMIT_ID = sh(script: "git rev-parse HEAD", returnStdout: true)
-            COMMIT_HASH = "${env.GIT_COMMIT.take(7)}"
+            COMMIT_ID = sh(script: "git rev-parse HEAD", returnStdout: true)
         }
 
         stages {
@@ -81,10 +80,10 @@ def call(Map config) {
                                     }
                                     failure {
                                         echo "unit test result: ${currentBuild.result}, ${currentBuild.currentResult}"
-                                        echo "git commit: ${GIT_COMMIT}"
-                                        script {
-                                            GitHub.checkPR($GITHUB_CREDS_PSW, 'bootcanal', 'canal', ${COMMIT_HASH}, 'failure')
-                                        }
+                                        echo "git commit: ${COMMIT_ID}"
+//                                        script {
+//                                            GitHub.checkPR($GITHUB_CREDS_PSW, 'bootcanal', 'canal', ${COMMIT_HASH}, 'failure')
+//                                        }
                                     }
                                 }
                             }
