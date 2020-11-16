@@ -3,7 +3,7 @@
 import com.github.bootcanal.*
 
 def call(Map config) {
-    def commit_id = "$(git rev-parse HEAD)"
+    def commit_id = $(git rev-parse HEAD)
     pipeline {
         agent none
 
