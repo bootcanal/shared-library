@@ -25,7 +25,7 @@ def call(Map config) {
                     stage('Initializing Git') {
                         steps {
                             echo 'Setting up GitHub Access'
-                            withCredentials([useranamePassword(credentialsId: 'DEVCX-GAMBIT-GITHUB', passwordVariable: 'token', usernameVariable: 'username')]) {
+                            withCredentials([usernamePassword(credentialsId: 'DEVCX-GAMBIT-GITHUB', passwordVariable: 'token', usernameVariable: 'username')]) {
                                 echo 'token:'
                                 echo '${token}'
                                 echo 'username:'
