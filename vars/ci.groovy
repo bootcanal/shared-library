@@ -59,6 +59,9 @@ def call(Map config) {
                             }
                         }
                         steps {
+                            script {
+                                env.COMMIT_ID = sh(script: "git rev-parse HEAD", returnStdout: true).trim()
+                            }
                             echo 'Building Go App'
                             echo 'go build -o ' + config.name + ' ' + config.main
                             sh 'go build -o ' + config.name + ' ' + config.main
@@ -66,11 +69,6 @@ def call(Map config) {
                         }
                     }
                     stage('Test') {
-                        steps {
-                            script {
-                                env.COMMIT_ID = sh(script: "git rev-parse HEAD", returnStdout: true).trim()
-                            }
-                        }
                         parallel {
                             stage('Run Go Unit Tests') {
                                 steps {
