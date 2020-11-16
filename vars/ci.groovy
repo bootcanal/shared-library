@@ -14,7 +14,7 @@ def call(Map config) {
             CGO_ENABLED = "0"
             GITHUB_CREDS = credentials('DEVCX-GAMBIT-GITHUB')
             //COMMIT_ID = sh(script: "git rev-parse HEAD", returnStdout: true)
-            COMMIT_HASH = ${env.GIT_COMMIT.take(7)}
+            COMMIT_HASH = "${env.GIT_COMMIT.take(7)}"
         }
 
         stages {
