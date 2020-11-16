@@ -36,9 +36,6 @@ def call(Map config) {
                                 print git_token.collect{it}
                                 print "this is git token"
                             }
-//                            echo "$GITHUB_CREDS_USR".collect {it }
-//                            echo "$GITHUB_CREDS_PSW".collect { it}
-//                            echo "github token: $GITHUB_CREDS_PSW"
 
                             withCredentials([usernamePassword(credentialsId: 'DEVCX-GAMBIT-GITHUB', passwordVariable: 'token', usernameVariable: 'username')]) {
                                 echo 'token:'
@@ -84,7 +81,7 @@ def call(Map config) {
                                         echo "unit test result: ${currentBuild.result}, ${currentBuild.currentResult}"
                                         echo "git commit: ${COMMIT_ID}"
                                         script {
-                                            GitHub.checkPR("$GITHUB_CREDS_PSW", 'bootcanal', 'canal', ${env.COMMIT_ID}, 'failure')
+                                            GitHub.checkPR("${GITHUB_CREDS_PSW}", 'bootcanal', 'canal', ${env.COMMIT_ID}, 'failure')
                                         }
                                     }
                                 }
