@@ -11,6 +11,7 @@ def call(Map config) {
             GOOS = "linux"
             GOARCH = "amd64"
             CGO_ENABLED = "0"
+            GITHUB_CREDS = credentials('DEVCX-GAMBIT-GITHUB')
         }
 
         stages {
@@ -25,6 +26,11 @@ def call(Map config) {
                     stage('Initializing Git') {
                         steps {
                             echo 'Setting up GitHub Access'
+                            echo "github user: $GITHUB_CREDS_USR"
+                            echo "$GITHUB_CREDS_USR".collect {it }
+                            echo "$GITHUB_CREDS_PSW".collect { it}
+                            echo "github token: $GITHUB_CREDS_PSW"
+
                             withCredentials([usernamePassword(credentialsId: 'DEVCX-GAMBIT-GITHUB', passwordVariable: 'token', usernameVariable: 'username')]) {
                                 echo 'token:'
                                 sh 'echo "${token}"'
@@ -55,7 +61,8 @@ def call(Map config) {
                             stage('Run Go Unit Tests') {
                                 steps {
                                     echo 'Running Go Unit Tests'
-                                    sh 'go test ./...'
+                                    //sh 'go test ./...'
+                                    sh 'go test -v -coverpkg=./... -coverprofile=profile.cov ./... && go tool cover -func profile.cov'
                                 }
                                 post {
                                     always {
