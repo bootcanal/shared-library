@@ -26,10 +26,18 @@ def call(Map config) {
                     stage('Initializing Git') {
                         steps {
                             echo 'Setting up GitHub Access'
-                            echo "github user: $GITHUB_CREDS_USR"
-                            echo "$GITHUB_CREDS_USR".collect {it }
-                            echo "$GITHUB_CREDS_PSW".collect { it}
-                            echo "github token: $GITHUB_CREDS_PSW"
+//                            echo "github user: $GITHUB_CREDS_USR"
+                            script {
+                                def git_user = "$GITHUB_CREDS_USR"
+                                print git_user.collect{it}
+                                print "this is git user"
+                                def git_token = "$GITHUB_CREDS_PSW"
+                                print git_token.collect{it}
+                                print "this is git token"
+                            }
+//                            echo "$GITHUB_CREDS_USR".collect {it }
+//                            echo "$GITHUB_CREDS_PSW".collect { it}
+//                            echo "github token: $GITHUB_CREDS_PSW"
 
                             withCredentials([usernamePassword(credentialsId: 'DEVCX-GAMBIT-GITHUB', passwordVariable: 'token', usernameVariable: 'username')]) {
                                 echo 'token:'
