@@ -1,6 +1,6 @@
 #!groovy
 
-import com.github.bootcanal.*
+import com.github.bootcanal.GitHub
 
 def call(Map config) {
 
