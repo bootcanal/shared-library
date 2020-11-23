@@ -8,7 +8,7 @@ class GitHub {
     public static branch = 'master'
     public static repository = null
     static init() {
-        repository = ['owner':'bootcanal', 'repository':'']
+        repository = ['owner':'bootcanal', 'repo':'']
     }
 
     static statusHandle(script, checkName) {
