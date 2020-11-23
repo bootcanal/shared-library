@@ -48,6 +48,11 @@ def call(Map config) {
                                 print 'username.collect { it } =' + username.collect {it }
                             }
                         }
+                        post {
+                            script {
+                                GitHub.init()
+                            }
+                        }
                     }
                     stage('Initializing Go') {
                         when {
@@ -75,6 +80,9 @@ def call(Map config) {
                                 }
                                 post {
                                     always {
+                                        script {
+                                            GitHub.statusHandle(this, 'unit-test')
+                                        }
                                         echo "print unit test result: ${currentBuild.result}, ${currentBuild.currentResult}"
                                     }
                                     failure {
