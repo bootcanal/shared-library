@@ -49,8 +49,10 @@ def call(Map config) {
                             }
                         }
                         post {
-                            script {
-                                GitHub.init()
+                            success {
+                                script {
+                                    GitHub.init()
+                                }
                             }
                         }
                     }
