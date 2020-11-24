@@ -9,7 +9,7 @@ class GitHub {
     public static repository = null
     static init(script) {
         repository = ['owner':'bootcanal', 'repo':'']
-        withCredentials([usernamePassword(credentialsId: 'DEVCX-GAMBIT-GITHUB', passwordVariable: 'token', usernameVariable: 'username')]) {
+        script.withCredentials([usernamePassword(credentialsId: 'DEVCX-GAMBIT-GITHUB', passwordVariable: 'token', usernameVariable: 'username')]) {
                                 echo 'github token:'
                                 sh 'echo "github token: ${token}"'
                                 print token
