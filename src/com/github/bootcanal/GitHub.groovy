@@ -11,6 +11,23 @@ class GitHub {
         repository = ['owner':'bootcanal', 'repo':'']
     }
 
+    def status(script) {
+        script.echo "######1: latest branch: ${branch}"
+        branch = 'status'
+    }
+
+    def review(script) {
+        script.echo "#####2: latest branch: ${branch}"
+        branch = 'review'
+    }
+
+    def tag(script) {
+        script.echo "#####2: latest branch: ${branch}"
+        branch = 'review'
+    }
+
+
+
     static statusHandle(script, checkName) {
         checkStatus(script, checkName)
     }

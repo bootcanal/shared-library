@@ -3,6 +3,7 @@
 import com.github.bootcanal.GitHub
 
 def call(Map config) {
+    def github = new GitHub()
 
     pipeline {
         agent none
@@ -52,6 +53,7 @@ def call(Map config) {
                             success {
                                 script {
                                     GitHub.init()
+                                    github.status(this)
                                 }
                             }
                         }
@@ -84,6 +86,7 @@ def call(Map config) {
                                     always {
                                         script {
                                             GitHub.statusHandle(this, 'unit-test')
+                                            github.review(this)
                                         }
                                         echo "print unit test result: ${currentBuild.result}, ${currentBuild.currentResult}"
                                     }
@@ -93,6 +96,7 @@ def call(Map config) {
 
                                         script {
                                             GitHub.checkPR(GITHUB_CREDS_PSW, 'bootcanal', 'canal', env.COMMIT_ID, 'failure')
+                                            github.review(this)
                                         }
                                     }
                                 }
@@ -100,6 +104,11 @@ def call(Map config) {
                             stage('Run API Tests') {
                                 steps {
                                     echo 'Running API Tests'
+                                }
+                                post {
+                                    always {
+                                        github.tag(this)
+                                    }
                                 }
                             }
                         }
