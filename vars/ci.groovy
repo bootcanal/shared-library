@@ -52,7 +52,7 @@ def call(Map config) {
                         post {
                             success {
                                 script {
-                                    GitHub.init()
+                                    GitHub.init(this)
                                     github.status(this)
                                 }
                             }
