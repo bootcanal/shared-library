@@ -10,7 +10,7 @@ class GitHub {
     public static pullName = ''
     public static branch = 'master'
     public static repository = null
-    def static getPassword(username) { 
+    static getPassword(username) { 
       def creds = com.cloudbees.plugins.credentials.CredentialsProvider.lookupCredentials (
           com.cloudbees.plugins.credentials.common.StandardUsernamePasswordCredentials.class,
           jenkins.model.Jenkins.instance
