@@ -3,14 +3,15 @@ package com.github.bootcanal
 import com.cloudbees.plugins.credentials.*
 import jenkins.models.*
 
-class GitHub {
+class GitHub implements Serializable {
     public static final CONTEXT_PREFIX = 'continuous-integration/jenkins/'
     public static final CONTEXT_MERGE = 'pr-merge'
     public static final STATUS_MAP = ['SUCCESS':'success', 'FAILURE':'failure','UNSTABLE':'failure', 'ABORTED':'failure']
     public static pullName = ''
     public static branch = 'master'
     public static repository = null
-    static getPassword(username) { 
+    @NonCPS
+    static getPassword(script, username) { 
       def creds = com.cloudbees.plugins.credentials.CredentialsProvider.lookupCredentials (
           com.cloudbees.plugins.credentials.common.StandardUsernamePasswordCredentials.class,
           jenkins.model.Jenkins.instance
@@ -22,14 +23,14 @@ class GitHub {
               'com.cloudbees.plugins.credentials.SystemCredentialsProvider'
           ).first()
           def password = systemCredentialsProvider.credentials.first().password
-          println password
+          script.echo "*****password****: ${password}"
       } else {
-          println "could not find credentials for ${username}"
+          script.echo "could not find credentials for ${username}"
       }
     }
 
     static init(script) {
-        getPassword('DEVCX-GAMBIT-GITHUB')
+        getPassword(script, 'DEVCX-GAMBIT-GITHUB')
         repository = ['owner':'bootcanal', 'repo':'']
     }
 
