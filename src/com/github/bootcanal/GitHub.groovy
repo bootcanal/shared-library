@@ -11,10 +11,10 @@ class GitHub {
     public static branch = 'master'
     public static repository = null
     def static getPassword = { username -> 
-      def creds = com.cloudbees.plugins.credentials.CredentialsProvider.lookupCredentials {
+      def creds = com.cloudbees.plugins.credentials.CredentialsProvider.lookupCredentials (
           com.cloudbees.plugins.credentials.common.StandardUsernamePasswordCredentials.class,
           jenkins.model.Jenkins.instance
-      }
+      )
       def c = creds.findResult { it.username == username ? it : null }
       if (c) {
           println "found credential ${c.id} for username ${c.username}"
