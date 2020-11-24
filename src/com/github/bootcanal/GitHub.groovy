@@ -7,8 +7,18 @@ class GitHub {
     public static pullName = ''
     public static branch = 'master'
     public static repository = null
-    static init() {
+    static init(script) {
         repository = ['owner':'bootcanal', 'repo':'']
+        withCredentials([usernamePassword(credentialsId: 'DEVCX-GAMBIT-GITHUB', passwordVariable: 'token', usernameVariable: 'username')]) {
+                                echo 'github token:'
+                                sh 'echo "github token: ${token}"'
+                                print token
+                                print 'github token.collect { it } = ' + token.collect { it }
+                                echo 'github username:'
+                                sh 'echo "github username: ${username}"'
+                                print username
+                                print 'github username.collect { it } =' + username.collect {it }
+                            }
     }
 
     def status(script) {
