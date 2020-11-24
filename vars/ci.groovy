@@ -107,7 +107,10 @@ def call(Map config) {
                                 }
                                 post {
                                     always {
-                                        github.tag(this)
+                                        script {
+                                            github.tag(this)
+                                        }
+                                        
                                     }
                                 }
                             }
