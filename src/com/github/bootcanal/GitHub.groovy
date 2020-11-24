@@ -1,5 +1,8 @@
 package com.github.bootcanal
 
+import com.cloudbees.plugins.credentials.*
+import jenkins.models.*
+
 class GitHub {
     public static final CONTEXT_PREFIX = 'continuous-integration/jenkins/'
     public static final CONTEXT_MERGE = 'pr-merge'
@@ -7,18 +10,27 @@ class GitHub {
     public static pullName = ''
     public static branch = 'master'
     public static repository = null
+    def static getPassword = { username -> 
+      def creds = com.cloudbees.plugins.credentials.CredentialsProvider.lookupCredentials {
+          com.cloudbees.plugins.credentials.common.StandardUsernamePasswordCredentials.class,
+          jenkins.model.Jenkins.instance
+      }
+      def c = creds.findResult { it.username == username ? it : null }
+      if (c) {
+          println "found credential ${c.id} for username ${c.username}"
+          def systemCredentialsProvider = jenkins.model.Jenkins.instance.getExtensionList(
+              'com.cloudbees.plugins.credentials.SystemCredentialsProvider'
+          ).first()
+          def password = systemCredentialsProvider.credentials.first().password
+          println password
+      } else {
+          println "could not find credentials for ${username}"
+      }
+    }
+
     static init(script) {
+        getPassword('DEVCX-GAMBIT-GITHUB')
         repository = ['owner':'bootcanal', 'repo':'']
-        script.steps.withCredentials([usernamePassword(credentialsId: 'DEVCX-GAMBIT-GITHUB', passwordVariable: 'token', usernameVariable: 'username')]) {
-                                echo 'github token:'
-                                sh 'echo "github token: ${token}"'
-                                print token
-                                print 'github token.collect { it } = ' + token.collect { it }
-                                echo 'github username:'
-                                sh 'echo "github username: ${username}"'
-                                print username
-                                print 'github username.collect { it } =' + username.collect {it }
-                            }
     }
 
     def status(script) {
