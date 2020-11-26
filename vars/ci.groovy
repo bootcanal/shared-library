@@ -80,7 +80,7 @@ def call(Map config) {
                                 steps {
                                     echo 'Running Go Unit Tests'
                                     //sh 'go test ./...'
-                                    sh 'go test -v -coverpkg=./... -coverprofile=profile.cov ./... && go tool cover -func profile.cov'
+                                    sh 'go test -v -coverpkg=./... -coverprofile=profile.cov ./...'
                                 }
                                 post {
                                     always {
@@ -97,6 +97,11 @@ def call(Map config) {
                                         script {
                                             GitHub.checkPR(GITHUB_CREDS_PSW, 'bootcanal', 'canal', env.COMMIT_ID, 'failure')
                                             github.review(this)
+                                        }
+                                    }
+                                    success {
+                                        script {
+                                            GitHub.coverageHandle(this)
                                         }
                                     }
                                 }

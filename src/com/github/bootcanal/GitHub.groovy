@@ -10,27 +10,8 @@ class GitHub implements Serializable {
     public static pullName = ''
     public static branch = 'master'
     public static repository = null
-    @NonCPS
-    static getPassword(script, username) { 
-      def creds = com.cloudbees.plugins.credentials.CredentialsProvider.lookupCredentials (
-          com.cloudbees.plugins.credentials.common.StandardUsernamePasswordCredentials.class,
-          jenkins.model.Jenkins.instance
-      )
-      def c = creds.findResult { it.username == username ? it : null }
-      if (c) {
-          println "found credential ${c.id} for username ${c.username}"
-          def systemCredentialsProvider = jenkins.model.Jenkins.instance.getExtensionList(
-              'com.cloudbees.plugins.credentials.SystemCredentialsProvider'
-          ).first()
-          def password = systemCredentialsProvider.credentials.first().password
-          script.echo "*****password****: ${password}"
-      } else {
-          script.echo "could not find credentials for ${username}"
-      }
-    }
 
     static init(script) {
-        getPassword(script, 'DEVCX-GAMBIT-GITHUB')
         repository = ['owner':'bootcanal', 'repo':'']
     }
 
@@ -47,6 +28,11 @@ class GitHub implements Serializable {
     def tag(script) {
         script.echo "#####2: latest branch: ${branch}"
         branch = 'review'
+    }
+
+    static coverageHandle(script) {
+        def cov = script.sh returnStdout: true, script: 'go tool cover -func coverage.cov | grep total | awk "{print substr($3, 1, length($3) - 1)}"'
+        script.echo "parse coverage: ${cov}"
     }
 
 
