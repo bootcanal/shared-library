@@ -1,6 +1,6 @@
 package com.github.bootcanal
 
-import groory.json.JsonOutput
+import groovy.json.JsonOutput
 
 class GitHub implements Serializable {
     public static final CONTEXT_PREFIX = 'continuous-integration/jenkins/'
