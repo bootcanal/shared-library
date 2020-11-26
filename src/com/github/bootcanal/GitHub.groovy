@@ -1,7 +1,6 @@
 package com.github.bootcanal
 
-import com.cloudbees.plugins.credentials.*
-import jenkins.models.*
+import groory.json.JsonOutput
 
 class GitHub implements Serializable {
     public static final CONTEXT_PREFIX = 'continuous-integration/jenkins/'
