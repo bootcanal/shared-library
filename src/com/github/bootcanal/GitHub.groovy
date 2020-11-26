@@ -30,7 +30,7 @@ class GitHub implements Serializable {
     }
 
     static coverageHandle(script) {
-        def cov = script.sh returnStdout: true, script: "go tool cover -func coverage.cov | grep total | awk '{print substr($3, 1, length($3)-1)}'"
+        def cov = script.sh returnStdout: true, script: "go tool cover -func coverage.cov | grep total | awk '{print substr(\$3, 1, length(\$3)-1)}'"
         script.echo "parse coverage: ${cov}"
     }
 
