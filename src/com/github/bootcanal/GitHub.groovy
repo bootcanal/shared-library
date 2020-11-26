@@ -30,7 +30,7 @@ class GitHub implements Serializable {
     }
 
     static coverageHandle(script) {
-        def cov = script.sh returnStdout: true, script: 'go tool cover -func coverage.cov | grep total | awk "{print substr($3, 1, length($3) - 1)}"'
+        def cov = script.sh returnStdout: true, script: "go tool cover -func coverage.cov | grep total | awk '{print substr($3, 1, length($3)-1)}'"
         script.echo "parse coverage: ${cov}"
     }
 
@@ -75,10 +75,10 @@ class GitHub implements Serializable {
         return state
     }
 
-    def static checkPR(token, organization, repo, commit_id, state) {
+    def static checkPR(script, token, organization, repo, commit_id, state) {
         def _context = 'continuous-integration/jenkins/unit-test'
         def pr_url = "https://api.github.com/repos/${organization}/${repo}/statuses/${commit_id}"
         def payload = JsonOutput.toJson([context: _context, state: state, target_url: 'https://github.com/bootcanal/canal', description: state])
-        sh("curl -XPOST -H \"Authorization: token ${token}\" ${pr_url} -d ${payload}")
+        script.sh script: "curl -XPOST -H \"Authorization: token ${token}\" ${pr_url} -d ${payload}"
     }
 }
