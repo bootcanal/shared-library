@@ -18,20 +18,10 @@ class GitHub {
     public static final CONTEXT_PREFIX = 'continuous-integration/jenkins/'
     public static final CONTEXT_BRANCH = 'branch'
     public static final CONTEXT_MERGE = 'pr-merge'
-    public static final STATUS_MAP = ['SUCCESS':'success', 'FAILURE':'failure','UNSTABLE':'failure', 'ABORTED':'failure']
     public static pullName = ''
     public static branch = 'master'
     public static repository = null
     public String name = ''
-
-    def String test() {
-        return "return github test"
-    }
-
-    def String setInfo(script, val) {
-        script.echo "set github info"
-        this.name = val
-    }
     public static final TAG_COMMIT = 'commit'
     public static final TAG_TREE = 'tree'
     public static final TAG_BLOB = 'blob'
@@ -114,6 +104,15 @@ class GitHub {
         this.setTargetUrl(script)
         this.setBuildNumber(script)
         this.setBranchDetail(script)
+    }
+
+    def String test() {
+        return "return github test"
+    }
+
+    def String setInfo(script, val) {
+        script.echo "set github info"
+        this.name = val
     }
 
     /**
