@@ -854,7 +854,7 @@ class GitHub {
         try {
             def refResponse = script.httpRequest contentType: 'APPLICATION_JSON', httpMode: 'POST', ignoreSslErrors: true, requestBody: payload, customHeaders: [[maskValue: true, name: 'Authorization', value: "token ${this.accessToken}"]], url: endpoint, wrapAsMultipart: false
             def refStatus = refResponse.getStatus()
-            if (refStatus != 200 || refStatus != 201) {
+            if (refStatus != 200 && refStatus != 201) {
                 script.error "create tag reference status: ${refStatus}"
                 return ''
             }
