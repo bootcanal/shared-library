@@ -852,12 +852,14 @@ class GitHub {
         //github reference api endpoint
         def endpoint = "${GITHUB_API}/repos/${this.repository['owner']}/${this.repository['repo']}/git/refs"
         try {
-            def refResponse = script.sh returnStatus: true, script: "set +e && curl -XPOST -H \"Content-Type: application/json\" -H \"Authorization: token ${this.accessToken}\" $endpoint -d '${payload}' && set -e"
-            if (refResponse == null) {
-                script.error "parse tag reference response null"
+            def refResponse = script.httpRequest contentType: 'APPLICATION_JSON', httpMode: 'POST', ignoreSslErrors: true, requestBody: payload, customHeaders: [[maskValue: true, name: 'Authorization', value: "token ${this.accessToken}"]], url: endpoint, wrapAsMultipart: false
+            def refStatus = refResponse.getStatus()
+            if (refStatus != 200 || refStatus != 201) {
+                script.error "create tag reference status: ${refStatus}"
                 return ''
             }
         } catch (Exception e) {
+            script.error "create tag reference error: ${e}"
             return ''
         }
         return tagVal
