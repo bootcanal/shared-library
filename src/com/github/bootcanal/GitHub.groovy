@@ -542,6 +542,7 @@ class GitHub {
             script.error "get branch ${endpoint} error: ${e}"
             return
         }
+        script.echo "Branch detail: ${branchContent}"
         //branchContent = branchContent?.trim()
         if (branchContent.length() == 0) {
             script.error "check branch ${endpoint} empty"
