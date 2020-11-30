@@ -13,7 +13,10 @@ def call(Map config) {
             GOOS = "linux"
             GOARCH = "amd64"
             CGO_ENABLED = "0"
-            GITHUB_CREDS = credentials('DEVCX-GAMBIT-GITHUB')
+            GITHUB_CREDS = credentials('CANAL_TOKEN')
+            UNIT_TEST_TARGET = 'unit-test'
+            CHANGE_URL = ''
+            CHANGE_ID = ''
         }
 
         stages {
@@ -28,7 +31,6 @@ def call(Map config) {
                     stage('Initializing Git') {
                         steps {
                             echo 'Setting up GitHub Access'
-//                            echo "github user: $GITHUB_CREDS_USR"
                             script {
                                 def git_user = "$GITHUB_CREDS_USR"
                                 print git_user.collect{it}
@@ -38,7 +40,7 @@ def call(Map config) {
                                 print "this is git token"
                             }
 
-                            withCredentials([usernamePassword(credentialsId: 'DEVCX-GAMBIT-GITHUB', passwordVariable: 'token', usernameVariable: 'username')]) {
+                            withCredentials([usernamePassword(credentialsId: 'CANAL_ACCOUNT', passwordVariable: 'token', usernameVariable: 'username')]) {
                                 github.test()
                                 github.setInfo(this, 'test')
                                 echo 'token:'
@@ -54,8 +56,12 @@ def call(Map config) {
                         post {
                             success {
                                 script {
-                                    GitHub.init(this)
-                                    github.status(this)
+                                    github.init(this)
+                                }
+                            }
+                            failure {
+                                script {
+                                    github.setState(this)
                                 }
                             }
                         }
@@ -75,6 +81,21 @@ def call(Map config) {
                             sh 'go build -o ' + config.name + ' ' + config.main
                             stash includes: 'bin/**', name: 'bin'
                         }
+                        post {
+                            failure {
+                                script {
+                                    github.setState(this)
+                                }
+                            }
+                        }
+                    }
+                    stage('Check Pull Request') {
+                        steps {
+                            echo 'Check pull request merged'
+                            script {
+                                github.checkPullRequest(this)
+                            }
+                        }
                     }
                     stage('Test') {
                         parallel {
@@ -82,14 +103,11 @@ def call(Map config) {
                                 steps {
                                     echo 'Running Go Unit Tests'
                                     //sh 'go test ./...'
-                                    sh 'go test -v -coverpkg=./... -coverprofile=profile.cov ./...'
+                                    //sh 'go test -v -coverpkg=./... -coverprofile=profile.cov ./...'
+                                    sh 'go test -coverpkg=./... -coverprofile=unit-test.cov ./...'
                                 }
                                 post {
                                     always {
-                                        script {
-                                            GitHub.statusHandle(this, 'unit-test')
-                                            github.review(this)
-                                        }
                                         echo "print unit test result: ${currentBuild.result}, ${currentBuild.currentResult}"
                                     }
                                     failure {
@@ -97,13 +115,14 @@ def call(Map config) {
                                         echo "git commit: ${COMMIT_ID}"
 
                                         script {
-                                            GitHub.checkPR(this.GITHUB_CREDS_PSW, 'bootcanal', 'canal', env.COMMIT_ID, 'failure')
-                                            github.review(this)
+                                            github.statusHandle(this, env.UNIT_TEST_TARGET)
+                                            github.reviewHandle(this, 'COMMENT')
                                         }
                                     }
                                     success {
                                         script {
-                                            GitHub.coverageHandle(this)
+                                            github.statusHandle(this, env.UNIT_TEST_TARGET)
+                                            coverage = this.sh(returnStdout: true, script: "go tool cover -func unit-test.cov | grep total | awk '{printf \"%.2f\", substr(\$3, 1, length(\$3)-1) / 100}'")
                                         }
                                     }
                                 }
@@ -112,13 +131,28 @@ def call(Map config) {
                                 steps {
                                     echo 'Running API Tests'
                                 }
-                                post {
-                                    always {
-                                        script {
-                                            github.tag(this)
-                                        }
-                                        
-                                    }
+                            }
+                        }
+                    }
+                }
+            }
+
+            stage('Deploy') {
+                stages {
+                    stage('Docker Build') {
+                        steps {
+                            script {
+                                if (github.getMergedStatus(this)) {
+                                    echo 'Building Docker Image'
+                                }
+                            }
+                        }
+                    }
+                    stage('Docker Push') {
+                        steps {
+                            script {
+                                if (github.getMergedStatus(this)) {
+                                    echo 'Pushing Docker Image to ECR'
                                 }
                             }
                         }
@@ -126,10 +160,9 @@ def call(Map config) {
                 }
                 post {
                     success {
-                        echo "current success result: ${currentBuild.result}"
-                    }
-                    failure {
-                        echo "current failure result: ${currentBuild.result}"
+                        script {
+                            github.tagHandle(this)
+                        }
                     }
                 }
             }
