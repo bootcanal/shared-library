@@ -536,7 +536,7 @@ class GitHub {
         def endpoint = "${GITHUB_API}/repos/${this.repository['owner']}/${this.repository['repo']}/branches/${this.branch}"
         def branchContent = ''
         try {
-            branchContent = script.sh returnStdout: true, script: "curl -H \"Content-Type: application/json\" -H \"Authorization: token ${this.accessToken}\" $endpoint"
+            branchContent = script.sh returnStdout: true, script: "curl -H \"Authorization: token ${this.accessToken}\" $endpoint"
             branchContent = branchContent?.trim()
         } catch (Exception e) {
             script.error "get branch ${endpoint} error: ${e}"
