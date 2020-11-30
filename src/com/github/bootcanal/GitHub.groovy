@@ -761,6 +761,7 @@ class GitHub {
             return ''
         }
         def refSha = parseTag.get('sha')
+        script.echo "tag ref: ${refSha}"
         if (refSha == null) {
             script.error "parse tag ref return null"
             return ''
@@ -809,6 +810,7 @@ class GitHub {
             script.error "create tag object ${endpoint} error: ${e}"
             return null
         }
+        script.echo "tag response: ${tagContent}"
         if (tagContent == null) {
             script.error "get tag object ${endpoint} response return null"
             return null
@@ -825,6 +827,7 @@ class GitHub {
             script.error "parse tag object ${endpoint} response errror: ${e}"
             return null
         }
+        script.echo "tag object: ${tagObject}"
         if (tagObject == null) {
             script.error "parse tag object ${endpoint} response null"
             return null
