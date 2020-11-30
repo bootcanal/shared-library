@@ -135,7 +135,7 @@ class GitHub {
     def tagHandle(script) {
         this.setState(script)
         this.setTagMessage(script)
-        this.generateTag()
+        this.generateTag(script)
         if (!this.merged) {
             return
         }
@@ -861,7 +861,7 @@ class GitHub {
     /**
      * set build tag name
      */
-    def generateTag() {
+    def generateTag(script) {
         this.tag = this.branch + '_' + this.buildNumber + '_' + this.commitHash.take(GITHUB_TAG_LENGTH)
         script.echo "############# git tag: ############# --------- ${this.tag}"
     }
@@ -1003,7 +1003,7 @@ class GitHub {
         //merged status is used to control docker image build/push and git tag create
         this.merged = true
         //set tag
-        this.generateTag()
+        this.generateTag(script)
     }
 
     /**
