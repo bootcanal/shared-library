@@ -862,6 +862,7 @@ class GitHub {
      */
     def generateTag() {
         this.tag = this.branch + '_' + this.buildNumber + '_' + this.commitHash.take(GITHUB_TAG_LENGTH)
+        script.echo "############# git tag: ############# --------- ${this.tag}"
     }
 
     /**
