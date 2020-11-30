@@ -41,8 +41,11 @@ def call(Map config) {
                             }
 
                             withCredentials([usernamePassword(credentialsId: 'CANAL_ACCOUNT', passwordVariable: 'token', usernameVariable: 'username')]) {
-                                github.test()
-                                github.setInfo(this, 'test')
+                                script {
+                                    github.test()
+                                    github.setInfo(this, 'test')
+                                }
+                                
                                 echo 'token:'
                                 sh 'echo "${token}"'
                                 print token
