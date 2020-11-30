@@ -908,7 +908,7 @@ class GitHub {
             this.pullNumber = this.getCommitPullNumber(script)
         }
         if (this.pullNumber.length() == 0) {
-            script.error "check pull request not found"
+            script.echo "check pull request not found"
             return
         }
         //github pull request api endpoint
