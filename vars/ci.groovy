@@ -24,6 +24,7 @@ def call(Map config) {
                 agent {
                     docker {
                         image 'golang:1.13'
+                        label 'docker'
                         args '-u root:sudo -v "${PWD}":/go -w /go'
                     }
                 }
@@ -133,11 +134,6 @@ def call(Map config) {
                         }
                     }
                 }
-                post {
-                    always {
-                        cleanWs deleteDirs: true
-                    }
-                }
             }
 
             stage('Deploy') {
@@ -147,7 +143,6 @@ def call(Map config) {
                             script {
                                 if (github.getMergedStatus()) {
                                     echo 'Building Docker Image'
-                                    unstash 'bin'
                                 }
                             }
                         }
@@ -163,9 +158,6 @@ def call(Map config) {
                     }
                 }
                 post {
-                    always {
-                        cleanWs deleteDirs: true
-                    }
                     success {
                         script {
                             github.tagHandle(this)
