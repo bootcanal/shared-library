@@ -107,7 +107,7 @@ def call(Map config) {
                                 post {
                                     always {
                                         script {
-                                            GitHub.statusHandle(this, 'unit-test')
+                                            github.statusHandle(this, 'unit-test')
                                             github.review(this)
                                         }
                                         echo "print unit test result: ${currentBuild.result}, ${currentBuild.currentResult}"
