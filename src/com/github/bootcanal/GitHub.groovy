@@ -136,6 +136,7 @@ class GitHub {
         this.setState(script)
         this.setTagMessage(script)
         this.generateTag(script)
+        script.echo "parse merged status: ${this.merged}"
         if (!this.merged) {
             return
         }
@@ -147,7 +148,8 @@ class GitHub {
      * 
      * @return boolean
      */
-    def boolean getMergedStatus() {
+    def boolean getMergedStatus(script) {
+        script.echo "get merge status: ${this.merged}"
         return this.merged
     }
 

@@ -140,7 +140,7 @@ def call(Map config) {
                     stage('Docker Build') {
                         steps {
                             script {
-                                if (github.getMergedStatus()) {
+                                if (github.getMergedStatus(this)) {
                                     echo 'Building Docker Image'
                                 }
                             }
@@ -149,7 +149,7 @@ def call(Map config) {
                     stage('Docker Push') {
                         steps {
                             script {
-                                if (github.getMergedStatus()) {
+                                if (github.getMergedStatus(this)) {
                                     echo 'Pushing Docker Image to ECR'
                                 }
                             }
