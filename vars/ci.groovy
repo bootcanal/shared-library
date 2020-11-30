@@ -39,6 +39,8 @@ def call(Map config) {
                             }
 
                             withCredentials([usernamePassword(credentialsId: 'DEVCX-GAMBIT-GITHUB', passwordVariable: 'token', usernameVariable: 'username')]) {
+                                github.test()
+                                github.setInfo(this, 'test')
                                 echo 'token:'
                                 sh 'echo "${token}"'
                                 print token

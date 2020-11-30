@@ -9,6 +9,16 @@ class GitHub implements Serializable {
     public static pullName = ''
     public static branch = 'master'
     public static repository = null
+    public String name = ''
+
+    def String test() {
+        return "return github test"
+    }
+
+    def String setInfo(script, val) {
+        script.echo "set github info"
+        this.name = val
+    }
 
     static init(script) {
         repository = ['owner':'bootcanal', 'repo':'']
