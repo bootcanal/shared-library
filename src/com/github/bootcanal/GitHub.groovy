@@ -5,7 +5,7 @@ import java.lang.Exception
 
 
 class GitHub {
-    public static final GITHUB_API = 'https://github.com/api/v3'
+    public static final GITHUB_API = 'https://api.github.com'
     public static final GITHUB_TAG_LENGTH = 7
     /**
      * STATUS_MAP contains Jenkins constant map to GitHub constant
