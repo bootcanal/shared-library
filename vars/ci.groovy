@@ -13,7 +13,7 @@ def call(Map config) {
             GOOS = "linux"
             GOARCH = "amd64"
             CGO_ENABLED = "0"
-            GITHUB_CREDS = credentials('CANAL_ACCOUNT')
+            GITHUB_CREDS = credentials("guoyu%20token")
             UNIT_TEST_TARGET = 'unit-test'
             CHANGE_URL = ''
             CHANGE_ID = ''
